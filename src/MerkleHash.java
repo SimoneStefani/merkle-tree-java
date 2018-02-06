@@ -20,7 +20,7 @@ public class MerkleHash {
      * @param buffer of bytes
      * @return a MerkleHash
      */
-    public MerkleHash create(byte[] buffer) {
+    public static MerkleHash create(byte[] buffer) {
         MerkleHash hash = new MerkleHash();
         hash.computeHash(buffer);
         return hash;
@@ -34,7 +34,7 @@ public class MerkleHash {
      * @param buffer string
      * @return a MerkleHash
      */
-    public MerkleHash create(String buffer) {
+    public static MerkleHash create(String buffer) {
         return create(buffer.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -46,7 +46,7 @@ public class MerkleHash {
      * @param right subtree hash
      * @return a MerkleHash
      */
-    public MerkleHash create(MerkleHash left, MerkleHash right) {
+    public static MerkleHash create(MerkleHash left, MerkleHash right) {
         return create(concatenate(left.getValue(), right.getValue()));
     }
 
@@ -114,7 +114,7 @@ public class MerkleHash {
      * @param b is the second array
      * @return a byte array
      */
-    private byte[] concatenate(byte[] a, byte[] b) {
+    public static byte[] concatenate(byte[] a, byte[] b) {
         byte[] c = new byte[a.length + b.length];
         System.arraycopy(a, 0, c, 0, a.length);
         System.arraycopy(b, 0, c, a.length, b.length);

@@ -1,0 +1,83 @@
+import java.security.InvalidParameterException;
+
+public class MerkleNode {
+    private MerkleHash hash;
+    private MerkleNode leftNode;
+    private MerkleNode rightNode;
+    private MerkleNode parent;
+
+    public MerkleNode(MerkleHash hash) {
+        this.hash = hash;
+    }
+
+    public MerkleNode(MerkleNode left, MerkleNode right) {
+        this.leftNode = left;
+        this.rightNode = right;
+        this.leftNode.parent = this;
+        if (this.rightNode != null) this.rightNode.parent = this;
+
+        computeHash();
+    }
+
+    public boolean isLeaf() {
+        return this.leftNode == null && this.rightNode == null;
+    }
+
+    @Override
+    public String toString() {
+        return hash.toString();
+    }
+
+    public void setLeftNode(MerkleNode node) {
+        if (node.hash == null) {
+            throw new InvalidParameterException("Node hash must be initialized!");
+        }
+
+        this.leftNode = node;
+        this.leftNode.parent = this;
+
+        computeHash();
+    }
+
+    public void setRightNode(MerkleNode node) {
+        if (node.hash == null) {
+            throw new InvalidParameterException("Node hash must be initialized!");
+        }
+
+        this.rightNode = node;
+        this.rightNode.parent = this;
+
+        if (this.leftNode != null) {
+            computeHash();
+        }
+    }
+
+    public boolean canVerifyHash() {
+        return (this.leftNode != null && this.rightNode != null) || (this.leftNode != null);
+    }
+
+    public boolean verifyHash() {
+        if (this.leftNode == null && this.rightNode == null) return true;
+        if (this.rightNode == null) return hash.equals(leftNode.hash);
+
+        if (this.leftNode == null) {
+            throw new InvalidParameterException("Left branch must be a node if right branch is a node!");
+        }
+
+        MerkleHash leftRightHash = MerkleHash.create(this.leftNode.hash, this.rightNode.hash);
+        return hash.equals(leftRightHash);
+    }
+
+    private void computeHash() {
+        if (this.rightNode.hash == null) {
+            this.hash = this.leftNode.hash;
+        } else {
+            MerkleHash.create(MerkleHash.concatenate(
+                    this.leftNode.hash.getValue(), this.rightNode.hash.getValue()));
+        }
+
+        if (this.parent != null) {
+            this.parent.computeHash();
+        }
+    }
+}
