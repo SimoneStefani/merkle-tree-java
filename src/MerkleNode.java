@@ -7,6 +7,10 @@ public class MerkleNode {
     private MerkleNode rightNode;
     private MerkleNode parent;
 
+
+    public MerkleNode() {
+    }
+
     public MerkleNode(MerkleHash hash) {
         this.hash = hash;
     }
@@ -69,6 +73,10 @@ public class MerkleNode {
         return hash.equals(leftRightHash);
     }
 
+    public boolean equals(MerkleNode other) {
+        return this.hash.equals(other.hash);
+    }
+
     public MerkleHash getHash() {
         return hash;
     }
@@ -85,8 +93,8 @@ public class MerkleNode {
         return rightNode;
     }
 
-    private void computeHash() {
-        if (this.rightNode.hash == null) {
+    public void computeHash() {
+        if (this.rightNode == null) {
             this.hash = this.leftNode.hash;
         } else {
             this.hash = MerkleHash.create(MerkleHash.concatenate(

@@ -13,6 +13,10 @@ public class MerkleTree {
         this.leaves = new ArrayList<>();
     }
 
+    public MerkleNode getRoot() {
+        return root;
+    }
+
     public MerkleNode appendLeaf(MerkleNode node) {
         this.nodes.add(node);
         this.leaves.add(node);

@@ -83,6 +83,11 @@ public class MerkleHash {
         return result;
     }
 
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(value);
+    }
+
     /**
      * Encode in Base64 the MerkleHash.
      *
