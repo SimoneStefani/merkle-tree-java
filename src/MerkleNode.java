@@ -1,4 +1,5 @@
 import java.security.InvalidParameterException;
+import java.util.Objects;
 
 public class MerkleNode {
     private MerkleHash hash;
@@ -72,6 +73,18 @@ public class MerkleNode {
         return hash;
     }
 
+    public MerkleNode getParent() {
+        return parent;
+    }
+
+    public MerkleNode getLeftNode() {
+        return leftNode;
+    }
+
+    public MerkleNode getRightNode() {
+        return rightNode;
+    }
+
     private void computeHash() {
         if (this.rightNode.hash == null) {
             this.hash = this.leftNode.hash;
@@ -83,5 +96,11 @@ public class MerkleNode {
         if (this.parent != null) {
             this.parent.computeHash();
         }
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(hash, leftNode, rightNode, parent);
     }
 }

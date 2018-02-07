@@ -64,4 +64,56 @@ public class MerkleTree {
             buildTree(parents);
         }
     }
+
+    public List<MerkleProofHash> auditProof(MerkleHash leafHash) {
+        List<MerkleProofHash> auditTrail = new ArrayList<>();
+
+        MerkleNode leafNode = this.findLeaf(leafHash);
+
+        if (leafNode != null) {
+            if (leafNode.getParent() == null) throw new InvalidParameterException("Expected leaf to have a parent!");
+            MerkleNode parent = leafNode.getParent();
+            this.buildAuditTrail(auditTrail, parent, leafNode);
+        }
+
+        return auditTrail;
+    }
+
+    public static boolean verifyAudit(MerkleHash rootHash, MerkleHash leafHash, List<MerkleProofHash> auditTrail) {
+        if (auditTrail.size() <= 0) throw new InvalidParameterException("Audit trail cannot be empty!");
+
+        MerkleHash testHash = leafHash;
+
+        for (MerkleProofHash auditHash : auditTrail) {
+            testHash = auditHash.direction == MerkleProofHash.Branch.LEFT
+                    ? MerkleHash.create(testHash, auditHash.hash)
+                    : MerkleHash.create(auditHash.hash, testHash);
+        }
+
+        return testHash == rootHash;
+    }
+
+    private MerkleNode findLeaf(MerkleHash hash) {
+        return this.leaves.stream()
+                .filter((leaf) -> leaf.getHash() == hash)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void buildAuditTrail(List<MerkleProofHash> auditTrail, MerkleNode parent, MerkleNode child) {
+        if (parent != null) {
+            if (child.getParent() != parent) {
+                throw new InvalidParameterException("Parent of child is not expected parent!");
+            }
+
+            MerkleNode nextChild = parent.getLeftNode() == child ? parent.getRightNode() : parent.getLeftNode();
+            MerkleProofHash.Branch direction = parent.getLeftNode() == child
+                    ? MerkleProofHash.Branch.LEFT
+                    : MerkleProofHash.Branch.RIGHT;
+
+            if (nextChild != null) auditTrail.add(new MerkleProofHash(nextChild.getHash(), direction));
+
+            this.buildAuditTrail(auditTrail, parent.getParent(), child.getParent());
+        }
+    }
 }
