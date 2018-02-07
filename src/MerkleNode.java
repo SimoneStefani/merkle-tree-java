@@ -16,7 +16,7 @@ public class MerkleNode {
         this.leftNode.parent = this;
         if (this.rightNode != null) this.rightNode.parent = this;
 
-        computeHash();
+        this.computeHash();
     }
 
     public boolean isLeaf() {
@@ -36,7 +36,7 @@ public class MerkleNode {
         this.leftNode = node;
         this.leftNode.parent = this;
 
-        computeHash();
+        this.computeHash();
     }
 
     public void setRightNode(MerkleNode node) {
@@ -48,7 +48,7 @@ public class MerkleNode {
         this.rightNode.parent = this;
 
         if (this.leftNode != null) {
-            computeHash();
+           this.computeHash();
         }
     }
 
@@ -76,7 +76,7 @@ public class MerkleNode {
         if (this.rightNode.hash == null) {
             this.hash = this.leftNode.hash;
         } else {
-            MerkleHash.create(MerkleHash.concatenate(
+            this.hash = MerkleHash.create(MerkleHash.concatenate(
                     this.leftNode.hash.getValue(), this.rightNode.hash.getValue()));
         }
 
