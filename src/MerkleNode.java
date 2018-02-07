@@ -68,6 +68,10 @@ public class MerkleNode {
         return hash.equals(leftRightHash);
     }
 
+    public MerkleHash getHash() {
+        return hash;
+    }
+
     private void computeHash() {
         if (this.rightNode.hash == null) {
             this.hash = this.leftNode.hash;
