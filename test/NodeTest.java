@@ -88,10 +88,6 @@ public class NodeTest {
         tree.appendLeaves(new MerkleHash[]{l1, l2, l3, l4});
         MerkleHash rootHash = tree.buildTree();
 
-        // Temporary
-        assertNotNull(rootHash);
-        assertNotNull(tree.getRoot());
-
         List<MerkleProofHash> auditTrail = tree.auditProof(l1);
         assertTrue(MerkleTree.verifyAudit(rootHash, l1, auditTrail));
 
@@ -115,4 +111,5 @@ public class NodeTest {
 
         return parentNode;
     }
+
 }
