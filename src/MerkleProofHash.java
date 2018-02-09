@@ -23,6 +23,8 @@ public class MerkleProofHash {
 
     @Override
     public String toString() {
-        return this.hash.toString();
+        String hash = this.hash.toString();
+        String direction = this.direction.toString();
+        return hash.concat("  from: ".concat(direction));
     }
 }

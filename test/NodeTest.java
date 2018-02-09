@@ -88,18 +88,21 @@ public class NodeTest {
         tree.appendLeaves(new MerkleHash[]{l1, l2, l3, l4});
         MerkleHash rootHash = tree.buildTree();
 
+        // Temporary
+        assertNotNull(rootHash);
+        assertNotNull(tree.getRoot());
+
         List<MerkleProofHash> auditTrail = tree.auditProof(l1);
-        auditTrail.forEach(System.out::println);
         assertTrue(MerkleTree.verifyAudit(rootHash, l1, auditTrail));
 
-//        auditTrail = tree.auditProof(l2);
-//        assertTrue(MerkleTree.verifyAudit(rootHash, l2, auditTrail));
-//
-//        auditTrail = tree.auditProof(l3);
-//        assertTrue(MerkleTree.verifyAudit(rootHash, l3, auditTrail));
-//
-//        auditTrail = tree.auditProof(l4);
-//        assertTrue(MerkleTree.verifyAudit(rootHash, l4, auditTrail));
+        auditTrail = tree.auditProof(l2);
+        assertTrue(MerkleTree.verifyAudit(rootHash, l2, auditTrail));
+
+        auditTrail = tree.auditProof(l3);
+        assertTrue(MerkleTree.verifyAudit(rootHash, l3, auditTrail));
+
+        auditTrail = tree.auditProof(l4);
+        assertTrue(MerkleTree.verifyAudit(rootHash, l4, auditTrail));
     }
 
     private MerkleNode createParentNode(String leftData, String rightData) {
