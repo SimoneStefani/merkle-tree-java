@@ -25,6 +25,6 @@ public class MerkleProofHash {
     public String toString() {
         String hash = this.hash.toString();
         String direction = this.direction.toString();
-        return hash.concat("  from: ".concat(direction));
+        return hash.concat("  is ".concat(direction).concat(" Child"));
     }
 }

@@ -140,9 +140,14 @@ public class NodeTest {
         MerkleHash rootHashAfterAddTree = tree1.addTree(tree2);
         assertFalse(rootHash1.equals(rootHashAfterAddTree));
 
+        //Assert that a leaf from the first tree can be verified
+        // in the newly merged tree.
+        List<MerkleProofHash> auditTrail = tree1.auditProof(l3);
+        assertTrue(MerkleTree.verifyAudit(rootHashAfterAddTree, l3, auditTrail));
+
         //Assert that a leaf from the second tree can be verified
         // in the newly merged tree.
-        List<MerkleProofHash> auditTrail = tree1.auditProof(l7);
+        auditTrail = tree1.auditProof(l7);
         assertTrue(MerkleTree.verifyAudit(rootHashAfterAddTree, l7, auditTrail));
     }
 
