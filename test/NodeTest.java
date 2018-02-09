@@ -101,6 +101,30 @@ public class NodeTest {
         assertTrue(MerkleTree.verifyAudit(rootHash, l4, auditTrail));
     }
 
+    @org.junit.Test
+    public void addTreeTest(){
+
+        MerkleTree tree1 = new MerkleTree();
+        MerkleHash l1 = MerkleHash.create("abc");
+        MerkleHash l2 = MerkleHash.create("def");
+        MerkleHash l3 = MerkleHash.create("ghi");
+        MerkleHash l4 = MerkleHash.create("jkl");
+        tree1.appendLeaves(new MerkleHash[]{l1, l2, l3, l4});
+        MerkleHash rootHash1 = tree1.buildTree();
+
+        MerkleTree tree2 = new MerkleTree();
+        MerkleHash l5 = MerkleHash.create("123");
+        MerkleHash l6 = MerkleHash.create("456");
+        MerkleHash l7 = MerkleHash.create("789");
+        tree2.appendLeaves(new MerkleHash[]{l5, l6, l7});
+        MerkleHash rootHash2 = tree2.buildTree();
+
+        MerkleHash rootHashAfterAddTree = tree1.addTree(tree2);
+
+        assertFalse(rootHash1.equals(rootHashAfterAddTree));
+
+    }
+
     private MerkleNode createParentNode(String leftData, String rightData) {
         MerkleNode parentNode = new MerkleNode();
         MerkleNode leftNode = new MerkleNode(MerkleHash.create(leftData));
