@@ -120,8 +120,11 @@ public class NodeTest {
         MerkleHash rootHash2 = tree2.buildTree();
 
         MerkleHash rootHashAfterAddTree = tree1.addTree(tree2);
-
         assertFalse(rootHash1.equals(rootHashAfterAddTree));
+
+        List<MerkleProofHash> auditTrail = tree1.auditProof(l6);
+        assertTrue(MerkleTree.verifyAudit(rootHashAfterAddTree, l6, auditTrail));
+
 
     }
 
@@ -135,5 +138,4 @@ public class NodeTest {
 
         return parentNode;
     }
-
 }
