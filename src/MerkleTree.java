@@ -13,6 +13,12 @@ public class MerkleTree {
         this.leaves = new ArrayList<>();
     }
 
+    public List<MerkleNode> getLeaves() {
+        return leaves;
+    }
+    public List<MerkleNode> getNodes() {
+        return nodes;
+    }
     public MerkleNode getRoot() {
         return root;
     }
@@ -89,12 +95,12 @@ public class MerkleTree {
         MerkleHash testHash = leafHash;
 
         for (MerkleProofHash auditHash : auditTrail) {
-            testHash = auditHash.direction == MerkleProofHash.Branch.LEFT
+            testHash = auditHash.direction == MerkleProofHash.Branch.RIGHT
                     ? MerkleHash.create(testHash, auditHash.hash)
                     : MerkleHash.create(auditHash.hash, testHash);
         }
 
-        return testHash == rootHash;
+        return testHash.equals(rootHash);
     }
 
     private MerkleNode findLeaf(MerkleHash hash) {
@@ -112,8 +118,8 @@ public class MerkleTree {
 
             MerkleNode nextChild = parent.getLeftNode() == child ? parent.getRightNode() : parent.getLeftNode();
             MerkleProofHash.Branch direction = parent.getLeftNode() == child
-                    ? MerkleProofHash.Branch.LEFT
-                    : MerkleProofHash.Branch.RIGHT;
+                    ? MerkleProofHash.Branch.RIGHT
+                    : MerkleProofHash.Branch.LEFT;
 
             if (nextChild != null) auditTrail.add(new MerkleProofHash(nextChild.getHash(), direction));
 
